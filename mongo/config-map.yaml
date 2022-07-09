@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-app-configs
+  namespace: mongo-app
+data:
+  data-base-url: mongodb-service

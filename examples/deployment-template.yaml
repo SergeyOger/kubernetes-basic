@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: learning
+  labels:
+    app: base-app
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-data
+  namespace: learning
+  labels:
+    app: base-app
+spec:
+  volumeName: postgres-data-volume
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: learning
+  name: nginx-service
+  labels:
+    app: base-app
+spec:
+  selector:
+    app: base-app
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lerning-kubernetes
+  namespace: learning
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: base-app
+  template:
+    metadata:
+      labels:
+        app: base-app
+    spec:
+      containers:
+        - name: ngnix
+          image: nginx
+          ports:
+            - containerPort: 8080
+
